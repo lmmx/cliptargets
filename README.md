@@ -16,7 +16,7 @@ Python package for enumerating and accessing multiple clipboard targets (formats
 In the [X Window System](https://en.wikipedia.org/wiki/X_Window_System), a clipboard can hold data
 in multiple different formats simultaneously—in
 *[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)*. Each format (such as plain
-text, UTF-8 text, or images) is identified by a *target*, with a label that is sometiems a [MIMEtype](https://en.wikipedia.org/wiki/Media_type).
+text, UTF-8 text, or images) is identified by a *target*, with a label that is sometimes a [MIMEtype](https://en.wikipedia.org/wiki/Media_type).
 
 - The program that owns the clipboard, such as [xclip](https://en.wikipedia.org/wiki/Xclip),
   announces these available targets to other applications.

@@ -32,30 +32,29 @@ def format_value(value: str | None) -> str:
 
 def cli() -> None:
     """Run the CLI command."""
+    as_json = "--json" in sys.argv
     try:
         targets = get_all_targets()
 
         # Handle empty result
         if not targets:
-            print("No clipboard targets found.")
+            print("No clipboard targets found.", file=sys.stderr)
             sys.exit(0)
 
         # Print targets
         max_target_len = max(len(target) for target in targets.keys())
 
-        print(f"Found {len(targets)} clipboard targets:")
-        print()
-
-        for target, value in sorted(targets.items()):
-            formatted_value = format_value(value)
-            print(f"{target:{max_target_len}} : {formatted_value}")
-
         # Print JSON data if requested
-        if "--json" in sys.argv:
+        if as_json:
             # Convert None values to null for proper JSON
             json_targets = {k: v if v is not None else None for k, v in targets.items()}
-            print("\nJSON output:")
             print(json.dumps(json_targets, indent=2))
+        else:
+            print(f"Found {len(targets)} clipboard targets:", file=sys.stderr)
+            print(file=sys.stderr)
+            for target, value in sorted(targets.items()):
+                formatted_value = format_value(value)
+                print(f"{target:{max_target_len}} : {formatted_value}", file=sys.stderr)
 
     except RuntimeError as e:
         print(f"Error: {e}", file=sys.stderr)

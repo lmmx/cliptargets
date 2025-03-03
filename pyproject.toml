@@ -49,7 +49,7 @@ docs = [
 ]
 
 [project.scripts]
-cliptargets = "cliptargets.main:main"
+cliptargets = "cliptargets.cli:cli"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/lmmx/cliptargets/issues"

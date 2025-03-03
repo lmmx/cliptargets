@@ -161,24 +161,55 @@ text/plain;charset=utf-8 : Hello World
 - `cliptargets/cli.py`: Command-line interface implementation
 - `cliptargets/__init__.py`: Package exports and version information
 
-## Common Clipboard Targets
+## Standard X11 Selection Targets
 
-The library works with any clipboard targets, but here are some common ones you might find:
+The ICCCM (Inter-Client Communication Conventions Manual) defines a comprehensive set of standard selection targets. Below is a table of these targets as defined in the X Consortium standards:
 
-| Target | Description | Typical Applications |
-|--------|-------------|---------------------|
-| STRING | Plain text (ISO Latin-1) | Most applications |
-| UTF8_STRING | Unicode text | Modern applications |
-| text/html | HTML content | Web browsers |
-| text/plain | Plain text | Most applications |
-| text/uri-list | URLs | Browsers, file managers |
-| image/png | PNG image data | Image editors |
-| TIMESTAMP | When the selection was made | All applications |
-| TARGETS | List of available targets | All applications |
+| Target Atom | Type | Data Received |
+|-------------|------|---------------|
+| ADOBE_PORTABLE_DOCUMENT_FORMAT | STRING | PDF content |
+| APPLE_PICT | APPLE_PICT | Apple PICT format image data |
+| BACKGROUND | PIXEL | A list of pixel values |
+| BITMAP | BITMAP | A list of bitmap IDs |
+| CHARACTER_POSITION | SPAN | The start and end of the selection in bytes |
+| CLASS | TEXT | Window class information |
+| CLIENT_WINDOW | WINDOW | Any top-level window owned by the selection owner |
+| COLORMAP | COLORMAP | A list of colormap IDs |
+| COLUMN_NUMBER | SPAN | The start and end column numbers |
+| COMPOUND_TEXT | COMPOUND_TEXT | Compound Text |
+| DELETE | NULL | Special target with side effect (selection deletion) |
+| DRAWABLE | DRAWABLE | A list of drawable IDs |
+| ENCAPSULATED_POSTSCRIPT | STRING | EPS data |
+| ENCAPSULATED_POSTSCRIPT_INTERCHANGE | STRING | EPSI data |
+| FILE_NAME | TEXT | The full path name of a file |
+| FOREGROUND | PIXEL | A list of pixel values |
+| HOST_NAME | TEXT | The hostname of the client machine |
+| INSERT_PROPERTY | NULL | Special target with side effect |
+| INSERT_SELECTION | NULL | Special target with side effect |
+| LENGTH | INTEGER | The number of bytes in the selection |
+| LINE_NUMBER | SPAN | The start and end line numbers |
+| LIST_LENGTH | INTEGER | The number of disjoint parts of the selection |
+| MODULE | TEXT | The name of the selected procedure |
+| MULTIPLE | ATOM_PAIR | For requesting multiple targets in one operation |
+| NAME | TEXT | Window name information |
+| ODIF | TEXT | ISO Office Document Interchange Format |
+| OWNER_OS | TEXT | The operating system of the owner client |
+| PIXMAP | PIXMAP | A list of pixmap IDs |
+| POSTSCRIPT | STRING | PostScript data |
+| PROCEDURE | TEXT | The name of the selected procedure |
+| PROCESS | INTEGER, TEXT | The process ID of the owner |
+| STRING | STRING | ISO Latin-1 (+TAB+NEWLINE) text |
+| TARGETS | ATOM | A list of valid target atoms (required) |
+| TASK | INTEGER, TEXT | The task ID of the owner |
+| TEXT | TEXT | The text in the owner's choice of encoding |
+| TIMESTAMP | INTEGER | The timestamp used to acquire the selection (required) |
+| USER | TEXT | The name of the user running the owner |
 
-See ICCCM for more details:
+These targets allow for rich data exchange between X11 applications. The most commonly used are STRING, UTF8_STRING, and text/plain, but applications should be prepared to handle any of these targets.
 
-- [X Consortium: _Inter-Client Communication Conventions Manual_](https://x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html)
+Selection owners are required to support at least TARGETS (which returns the list of supported targets) and TIMESTAMP (which returns the time the selection was acquired).
+
+For more comprehensive details, see the [X Consortium: _Inter-Client Communication Conventions Manual_](https://x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html).
 
 ## Contributing
 

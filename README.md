@@ -1,23 +1,71 @@
 # cliptargets
 
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 [![PyPI](https://img.shields.io/pypi/v/cliptargets.svg)](https://pypi.org/project/cliptargets/)
 [![Python Version](https://img.shields.io/pypi/pyversions/cliptargets.svg)](https://pypi.org/project/cliptargets/)
 [![License](https://img.shields.io/pypi/l/cliptargets.svg)](https://github.com/lmmx/cliptargets/blob/main/LICENSE)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lmmx/cliptargets/master.svg)](https://results.pre-commit.ci/latest/github/lmmx/cliptargets/master)
 
 **Enumerate multiple clipboard targets.**
 
-A utility to retrieve data from all available clipboard targets on X11 systems, with proper encoding detection and handling.
+Python package for enumerating and accessing multiple clipboard targets (formats) in X11.
 
-## Requirements
+## Background
 
-- Python 3.10+
-- `xclip` command-line tool (must be installed separately)
+In the [X Window System](https://en.wikipedia.org/wiki/X_Window_System), a clipboard can hold data
+in multiple different formats simultaneously—in
+*[superposition](https://en.wikipedia.org/wiki/Quantum_superposition)*. Each format (such as plain
+text, UTF-8 text, or images) is identified by a *target*, with a label that is sometiems a [MIMEtype](https://en.wikipedia.org/wiki/Media_type).
+
+- The program that owns the clipboard, such as [xclip](https://en.wikipedia.org/wiki/Xclip),
+  announces these available targets to other applications.
+- When another application wants to paste, it requests the clipboard data in a specific target format.
+- The clipboard owner then converts and provides the data in the requested format.
+- Although the clipboard owner stores only one original copy of the data, it can supply this data in
+  various formats, depending on what the requesting application needs.
+
+> See [how-it-works.md](how-it-works.md) for more details
+
+cliptargets handles encoding (some clipboard targets may be non-UTF8) as either a CLI or Python API for inspecting the clipboard's contents across all available formats.
+
+See ICCCM for more details:
+
+- [X Consortium: _Inter-Client Communication Conventions Manual_](https://x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html)
+
+## Features
+
+- **Comprehensive Target Discovery**: Enumerate all available clipboard targets/formats
+- **Intelligent Encoding Detection**: Automatically detects and properly handles various encodings (UTF-8, UTF-16LE, Latin-1)
+- **Format-Specific Handling**: Special handling for Mozilla-specific formats and other binary formats
+- **Simple CLI**: Command-line interface for quick clipboard inspection
+- **Clean Python API**: Programmatic access to clipboard targets
+- **JSON Output**: Option to export all targets and values as JSON
+- **Zero Dependencies**: Core functionality has no external dependencies (beyond xclip)
 
 ## Installation
 
 ```bash
+# Install with pip
 pip install cliptargets
+
+# Install with PDM
+pdm add cliptargets
+
+# Install with uv
+uv pip install cliptargets
+
+# Development installation
+pip install -e ".[dev]"
+
+# Documentation tools
+pip install -e ".[docs]"
 ```
+
+> Note: The `xclip` command-line tool must be installed on your system separately.
+> On Debian/Ubuntu: `sudo apt install xclip`
+> On Fedora/RHEL: `sudo dnf install xclip`
+> On Arch Linux: `sudo pacman -S xclip`
 
 ## Usage
 
@@ -29,6 +77,9 @@ cliptargets
 
 # Print as JSON
 cliptargets --json
+
+# Get help
+cliptargets --help
 ```
 
 ### Python API
@@ -50,13 +101,38 @@ for target, value in all_targets.items():
     print(f"{target}: {value}")
 ```
 
-## Why use this library?
+### Use in Scripts
+
+```python
+import cliptargets
+import json
+
+# Get HTML content from clipboard if available
+html_content = cliptargets.get_target_value("text/html")
+if html_content:
+    print("HTML content found in clipboard!")
+    # Process the HTML...
+
+# Check if a URL is in the clipboard
+url = cliptargets.get_target_value("text/x-moz-url-priv")
+if url:
+    print(f"URL found: {url}")
+
+# Export all clipboard data to a JSON file
+all_targets = cliptargets.get_all_targets()
+with open("clipboard_data.json", "w") as f:
+    json.dump(all_targets, f, indent=2)
+```
+
+## Why Use This Library?
 
 X11 clipboard can store data in multiple formats simultaneously, but most tools only access the default text format. This library lets you:
 
-1. Discover all available formats in the clipboard
-2. Extract data from any format
-3. Handle encoding issues correctly (particularly for UTF-16LE formats)
+1. **Discover Hidden Data**: Access formats like HTML, URLs, and application-specific data
+2. **Debug Copy/Paste Issues**: Diagnose why copy/paste operations work differently between applications
+3. **Handle Encoding Correctly**: Avoid encoding problems with UTF-16LE and other formats
+4. **Access Raw Data**: Get direct access to clipboard data without application interference
+5. **Build Better Tools**: Create clipboard managers and data transfer tools with access to all formats
 
 ## Example Output
 
@@ -78,6 +154,46 @@ text/plain;charset=utf-8 : 'Hello World'
 text/x-moz-url-priv : 'https://example.com'
 ```
 
+## Project Structure
+
+- `cliptargets/core.py`: Core functionality for handling clipboard targets and encoding
+- `cliptargets/cli.py`: Command-line interface implementation
+- `cliptargets/__init__.py`: Package exports and version information
+
+## Common Clipboard Targets
+
+The library works with any clipboard targets, but here are some common ones you might find:
+
+| Target | Description | Typical Applications |
+|--------|-------------|---------------------|
+| STRING | Plain text (ISO Latin-1) | Most applications |
+| UTF8_STRING | Unicode text | Modern applications |
+| text/html | HTML content | Web browsers |
+| text/plain | Plain text | Most applications |
+| text/uri-list | URLs | Browsers, file managers |
+| image/png | PNG image data | Image editors |
+| TIMESTAMP | When the selection was made | All applications |
+| TARGETS | List of available targets | All applications |
+
+## Contributing
+
+Contributions are welcome!
+
+1. **Issues & Discussions**: Please open a GitHub issue for bugs, feature requests, or questions.
+2. **Pull Requests**: PRs are welcome!
+   - Install the dev dependencies with `pip install -e ".[dev]"`
+   - Make sure tests pass with `pytest`
+   - Format code with `pre-commit run --all-files`
+
+## Requirements
+
+- Python 3.10+
+- `xclip` command-line tool (must be installed separately)
+
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Credits
+
+The original inspiration for this tool came from troubleshooting complex clipboard encoding issues with X11 applications. Special thanks to the X.org community and the ICCCM documentation.

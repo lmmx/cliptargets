@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/pypi/l/cliptargets.svg)](https://github.com/lmmx/cliptargets/blob/main/LICENSE)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/lmmx/cliptargets/master.svg)](https://results.pre-commit.ci/latest/github/lmmx/cliptargets/master)
 
-**Enumerate multiple clipboard targets.**
+**Enumerate multiple X11 clipboard targets (formats).**
 
 Python package for enumerating and accessing multiple clipboard targets (formats) in X11.
 

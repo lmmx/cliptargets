@@ -29,10 +29,6 @@ text, UTF-8 text, or images) is identified by a *target*, with a label that is s
 
 cliptargets handles encoding (some clipboard targets may be non-UTF8) as either a CLI or Python API for inspecting the clipboard's contents across all available formats.
 
-See ICCCM for more details:
-
-- [X Consortium: _Inter-Client Communication Conventions Manual_](https://x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html)
-
 ## Features
 
 - **Comprehensive Target Discovery**: Enumerate all available clipboard targets/formats
@@ -46,26 +42,18 @@ See ICCCM for more details:
 ## Installation
 
 ```bash
-# Install with pip
 pip install cliptargets
-
-# Install with PDM
-pdm add cliptargets
-
-# Install with uv
-uv pip install cliptargets
-
-# Development installation
-pip install -e ".[dev]"
-
-# Documentation tools
-pip install -e ".[docs]"
 ```
 
+### Requirements
+
+- Python 3.10+
+- `xclip`
+
 > Note: The `xclip` command-line tool must be installed on your system separately.
-> On Debian/Ubuntu: `sudo apt install xclip`
-> On Fedora/RHEL: `sudo dnf install xclip`
-> On Arch Linux: `sudo pacman -S xclip`
+> - On Debian/Ubuntu: `sudo apt install xclip`
+> - On Fedora/RHEL: `sudo dnf install xclip`
+> - On Arch Linux: `sudo pacman -S xclip`
 
 ## Usage
 
@@ -77,9 +65,6 @@ cliptargets
 
 # Print as JSON
 cliptargets --json
-
-# Get help
-cliptargets --help
 ```
 
 ### Python API
@@ -136,22 +121,38 @@ X11 clipboard can store data in multiple formats simultaneously, but most tools 
 
 ## Example Output
 
-```
-Found 13 clipboard targets:
+### STDOUT
 
-COMPOUND_TEXT     : 'Hello World'
-MULTIPLE          : <not available>
-STRING            : 'Hello World'
-TARGETS           : 'TIMESTAMP\nTARGETS\nMULTIPLE\ntext/html\nUTF8_STRING\nCOMPOUND_TEXT\nTEXT\nSTRING\ntext/plain;charset=utf-8\ntext/plain'
-TEXT              : 'Hello World'
-TIMESTAMP         : '55692985'
-UTF8_STRING       : 'Hello World'
-text/_moz_htmlcontext : '<html xmlns="http://www.w3.org/1999/xhtml">...</html>'
-text/_moz_htmlinfo    : '0,2'
-text/html         : '<meta http-equiv="content-type" content="text/html; charset=utf-8">Hello World'
-text/plain        : 'Hello World'
-text/plain;charset=utf-8 : 'Hello World'
-text/x-moz-url-priv : 'https://example.com'
+```
+Found 9 clipboard targets:
+
+COMPOUND_TEXT            : Hello World
+MULTIPLE                 : <not available>
+STRING                   : Hello World
+TARGETS                  :
+TIMESTAMP\nTARGETS\nMULTIPLE\nUTF8_STRING\nCOMPOUND_TEXT\nTEXT\nSTRING\ntext/plain;charset=utf-8\ntext/plain\n
+TEXT                     : Hello World
+TIMESTAMP                : 62401715\n
+UTF8_STRING              : Hello World
+text/plain               : Hello World
+text/plain;charset=utf-8 : Hello World
+```
+
+### JSON
+
+```json
+{
+  "TIMESTAMP": "62401715\n",
+  "TARGETS":
+"TIMESTAMP\nTARGETS\nMULTIPLE\nUTF8_STRING\nCOMPOUND_TEXT\nTEXT\nSTRING\ntext/plain;charset=utf-8\ntext/plain\n",
+  "MULTIPLE": null,
+  "UTF8_STRING": "Hello World",
+  "COMPOUND_TEXT": "Hello World",
+  "TEXT": "Hello World",
+  "STRING": "Hello World",
+  "text/plain;charset=utf-8": "Hello World",
+  "text/plain": "Hello World"
+}
 ```
 
 ## Project Structure
@@ -175,6 +176,10 @@ The library works with any clipboard targets, but here are some common ones you 
 | TIMESTAMP | When the selection was made | All applications |
 | TARGETS | List of available targets | All applications |
 
+See ICCCM for more details:
+
+- [X Consortium: _Inter-Client Communication Conventions Manual_](https://x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html)
+
 ## Contributing
 
 Contributions are welcome!
@@ -184,11 +189,6 @@ Contributions are welcome!
    - Install the dev dependencies with `pip install -e ".[dev]"`
    - Make sure tests pass with `pytest`
    - Format code with `pre-commit run --all-files`
-
-## Requirements
-
-- Python 3.10+
-- `xclip` command-line tool (must be installed separately)
 
 ## License
 

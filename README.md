@@ -25,7 +25,7 @@ text, UTF-8 text, or images) is identified by a *target*, with a label that is s
 - Although the clipboard owner stores only one original copy of the data, it can supply this data in
   various formats, depending on what the requesting application needs.
 
-> See [How It Works](docs/how-it-works.md) for more details
+> See [How It Works](https://github.com/lmmx/cliptargets/blob/master/docs/how-it-works.md) for more details
 
 cliptargets handles encoding (some clipboard targets may be non-UTF8) as either a CLI or Python API for inspecting the clipboard's contents across all available formats.
 

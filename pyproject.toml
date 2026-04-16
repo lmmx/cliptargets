@@ -17,6 +17,7 @@ docs = [
     "urllib3<2",
 ]
 test = [
+    "datapasta>=1.0.0",
     "pytest>=8.3.4",
 ]
 

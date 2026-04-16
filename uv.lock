@@ -8,7 +8,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-04-13T12:10:17.205226329Z"
+exclude-newer = "2026-04-13T12:11:45.797050551Z"
 exclude-newer-span = "P3D"
 
 [[package]]
@@ -251,6 +251,7 @@ docs = [
     { name = "urllib3" },
 ]
 test = [
+    { name = "datapasta" },
     { name = "pytest" },
 ]
 
@@ -268,7 +269,10 @@ docs = [
     { name = "ruff", specifier = ">=0.9.5" },
     { name = "urllib3", specifier = "<2" },
 ]
-test = [{ name = "pytest", specifier = ">=8.3.4" }]
+test = [
+    { name = "datapasta", specifier = ">=1.0.0" },
+    { name = "pytest", specifier = ">=8.3.4" },
+]
 
 [[package]]
 name = "colorama"
@@ -296,6 +300,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e7/fc/326cb6f988905998f09bb54a3f5d98d4462ba119363c0dfad29750d48c09/cssselect2-0.7.0.tar.gz", hash = "sha256:1ccd984dab89fc68955043aca4e1b03e0cf29cad9880f6e28e3ba7a74b14aa5a", size = 35888, upload-time = "2022-09-19T12:55:11.876Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9d/3a/e39436efe51894243ff145a37c4f9a030839b97779ebcc4f13b3ba21c54e/cssselect2-0.7.0-py3-none-any.whl", hash = "sha256:fd23a65bfd444595913f02fc71f6b286c29261e354c41d722ca7a261a49b5969", size = 15586, upload-time = "2022-09-19T12:55:07.56Z" },
+]
+
+[[package]]
+name = "datapasta"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cliptargets" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9d/12/1058f6b9a5b5793a235c00a472ce62231dec1fa3d46dc2e92f22200f07c4/datapasta-1.0.0.tar.gz", hash = "sha256:825923992df80a63cd221aff2b955158569368415f47d1bd350ff09f66b67b8b", size = 24048, upload-time = "2025-03-03T16:21:56.438Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/40/fb/2759351aec498cdb5b9f64ef20fd2cff502e0e8df202103dab54a6482ceb/datapasta-1.0.0-py3-none-any.whl", hash = "sha256:46a825c4229e0056d40023b0edcf65a3eb1e34c1559500a8236a95de549edf75", size = 18219, upload-time = "2025-03-03T16:21:55.339Z" },
 ]
 
 [[package]]
